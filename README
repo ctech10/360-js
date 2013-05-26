@@ -1,0 +1,7 @@
+Python sprite-generator.py script - usage instructions for Windows users.
+
+1) Installing Python 2.7.* ( important: not Python 3.*, not tested under Python 3) http://www.python.org/ftp/python/2.7.3/python-2.7.3.msi
+2) Installing PIL for Python 2.7 http://www.pythonware.com/products/pil/  (marked Windows only) http://effbot.org/downloads/PIL-1.1.7.win32-py2.7.exe
+3) Fixing paths/options inside the script (images/output directory are necessary)
+4) Running script from cmd (e.g. C:\Path\To\Script>sprite-gen.py)
+

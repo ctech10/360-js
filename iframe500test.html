@@ -1,0 +1,336 @@
+<!Doctype html> 
+<html lang="en">
+<head>
+	<base target="_parent" />
+	<meta charset="utf-8" />
+	<title>iframe500x500</title>
+	<link rel="stylesheet" href="/css/jquery-ui.css" />
+	<script src="/js/jquery-1.9.1.min.js"></script>
+	<script src="/js/jquery-ui.js"></script>
+	<script src="/js/handlebars-1.0.rc.1.min.js"></script>
+	
+	
+	
+	
+	
+
+
+<!-- labels tempmlate-->	
+<script id="label-template" type="text/x-handlebars-template">
+	<div class="info-item info-item{{ position }} info-item-{{ side }}">
+		<img src="/img/label-{{ side }}.png" class="info-item-label"/>
+		<a href="{{ link }}" class="info-item-label-link">למכירה</a>
+	</div>
+</script>
+  
+  
+<script>
+
+/***
+	labels scheme: 
+		face:{front|back},
+		side:{left:right},
+		position:{1-6},
+		link:string
+*/
+var labels = [		
+	{"face":"front","side":"right", "position":"1", "link":"http://google.com"},
+	{"face":"front","side":"left", "position":"4", "link":"http://google.com"},		
+	{"face":"back","side":"left", "position":"2", "link":"http://google.com"},
+	{"face":"back","side":"left", "position":"6", "link":"http://google.com"},
+	{"face":"back","side":"right", "position":"1", "link":"http://google.com"}
+	
+];
+
+
+</script>
+  
+  
+  <script>
+  
+  var spriteSrc = "/output/s500q75.jpg";
+  
+  //preloading sprite
+  function preloadSprite(){
+	if (document.images) {
+		var sprite = new Image();	
+		sprite.onload = function(){
+			//console.log('loaded')
+			$("#loader").remove();
+			$("#imgcont").css({
+				"background":"#fff url("+ spriteSrc +") no-repeat scroll 0 -3000px"
+			});
+			$("#container").css("display", "block");
+			
+		}
+		sprite.src = spriteSrc;
+	}
+}
+ preloadSprite();
+
+  //transforms
+ function setTransformProperty(el,xAngle,yAngle, zValue, tX, tY ) {
+    xAngle = xAngle || 0;
+    yAngle = yAngle || 0;
+	zValue = zValue || 0;
+	tX = tX || 0;
+	tY = tY || 0;
+	
+    // Note that in some versions of IE9 it is critical that
+    // msTransform appear in this list before MozTransform
+    var properties = [		
+		'msTransform',
+        'transform',		
+        'WebkitTransform',        
+        'MozTransform',
+        'OTransform'
+    ];
+    var p, stylestr, fullstr = "";
+    while (p = properties.shift()) {
+       // console.log('appending', p)
+        stylestr = "rotateY("+ yAngle  +"deg) rotateX("+ xAngle  +"deg) translateZ("+zValue+"px) translateX("+tX+"px) translateY("+tY+"px)";
+		el.style[p] = stylestr;
+	 
+    }
+    return false;
+}
+
+ //slider
+function initSlider(){
+	var cols  = 10, image_width = 500, image_height = 500, total_height = 6000;
+	$( "#slider" ).slider({
+		min: 0,
+		max: 120,
+		value:59,
+		slide: function( event, ui ) {    
+			// console.log(ui.value)
+			$("#imgcont").css("background-position", -image_width*(ui.value % cols) + "px " +  -parseInt(ui.value/cols)*image_height % total_height + "px");
+			setTransformProperty($("#scene")[0] ,0, 180 - ui.value*3 , 0 ,0 , 0);
+		}
+	});
+
+}
+		
+
+			
+//labels
+function renderLabels(){
+	labels = labels || [];
+	var source   = $("#label-template").html();
+	var template = Handlebars.compile(source);
+	$(labels).each(function(index,item){
+		var html    = template(item);		
+		$("." + item.face).append(html)
+	})
+}
+	
+	
+ 
+ //document ready           
+$(function() {
+	//console.log('ready')
+	
+	initSlider();
+	renderLabels();
+	
+	
+});
+  
+
+
+
+</script>
+  
+  
+
+
+
+</head>
+
+<!-- Slider & sprite styles -->
+<style>
+body,img{
+    margin:0;
+    padding:0;
+    border:0 none;
+}
+
+
+:focus{
+    outline:0 none;
+}
+
+
+#imgcont{
+    height:500px;
+    width:500px;
+    margin: -55px auto 20px;
+ 
+    overflow:hidden;
+    position:relative;
+   
+    
+    background:#fff no-repeat scroll 0 -3000px;
+   /* background-size: 5000px 6500px; */
+}
+
+#slider{
+    width:450px;
+    margin:0 auto;
+    background:transparent;
+    border:0 none;
+}
+
+
+
+#loader{
+    position:absolute;
+    top: 225px;
+    left: 200px;
+    z-index:10000;
+}
+    
+    
+ /*jquery ui overrides*/   
+ 
+ .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default{
+    background:none;
+     border:0 none;
+ }
+ 
+ .ui-slider .ui-slider-handle{
+    width:33px;
+    height:21px;
+    background:transparent url(/img/b.png) no-repeat scroll 0 0;
+    cursor:pointer;
+    
+ }
+    
+</style>
+
+
+<!-- 3D cube styles -->
+<style>
+#container{
+	-ms-perspective:500px;
+	-moz-perspective:500px;
+	-webkit-perspective:500px;
+	-o-perspective:500px;
+	 perspective:500px;
+	height:300px;
+	width:300px;
+	position:absolute;
+	top: 100px;
+	left: 100px;
+	display:none; 
+}
+	
+	
+		#scene{
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			transform-style: preserve-3d;
+			-ms-transform-style: preserve-3d;
+			-moz-transform-style: preserve-3d;
+			-o-transform-style: preserve-3d;
+			-webkit-transform-style: preserve-3d;
+		}
+				.item{
+					position: absolute;
+					top:50px;
+					left:50px;
+					width: 200px;
+					height: 200px;		
+					-webkit-backface-visibility: hidden;
+					backface-visibility: hidden;					
+				}
+				
+				.front{
+					width: 150px;
+					transform: perspective(500px)  rotateY(0deg) rotateX(0deg) translateZ(140px) translateX(15px) translateY(0px);
+					-ms-transform:perspective(500px) rotateY(0deg) rotateX(0deg) translateZ(140px) translateX(15px) translateY(0px);	
+					-webkit-transform:rotateY(0deg) rotateX(0deg) translateZ(140px) translateX(15px) translateY(0px);
+					-moz-transform:rotateY(0deg) rotateX(0deg) translateZ(140px) translateX(15px) translateY(0px);
+					-o-transform:rotateY(0deg) rotateX(0deg) translateZ(140px) translateX(15px) translateY(0px);
+					
+
+				}			
+
+
+				.back{
+					width: 150px;
+					transform: perspective(500px) rotateY(-180deg) rotateX(0deg) translateZ(140px) translateX(-44px) translateY(0px); 
+					-ms-transform:perspective(500px) rotateY(-180deg) rotateX(0deg) translateZ(140px) translateX(-44px) translateY(0px);	
+					-webkit-transform: rotateY(-180deg) rotateX(0deg) translateZ(140px) translateX(-44px) translateY(0px);
+					-moz-transform:rotateY(-180deg) rotateX(0deg) translateZ(140px) translateX(-44px) translateY(0px);
+					-o-transform:rotateY(-180deg) rotateX(0deg) translateZ(140px) translateX(-44px) translateY(0px);
+					
+
+				}	
+
+</style>
+
+<!-- info labels styles-->
+<style>
+
+.info-item{
+	height: 27px;
+	width: 70px;
+	position:absolute;	 
+}
+			
+
+	 .info-item-label{
+		height: 42px;
+		position: absolute;	
+		bottom: -16px;
+		border:0 none;
+	 }
+	 
+	.info-item-label-link{
+		position:absolute;
+		text-decoration:none;
+		font-family: arial;
+		font-size: 10px;
+		color: #01B0DB;
+		bottom: -16px;
+	 }
+	
+	.info-item-left{ left: 0px;}			
+	.info-item-right{ left: 101px;}
+	
+	
+	.info-item-left .info-item-label{ left: -56px; }	 
+	.info-item-right .info-item-label{left: 0; }
+
+	.info-item-left .info-item-label-link{ left: -56px; }
+	.info-item-right .info-item-label-link{ left: 100px; }
+	
+	
+	.info-item1{ top: 6px; }
+	.info-item2{ top: 76px;}
+	.info-item3{ top: 40px;}			
+	.info-item4{ top: 111px;}
+	.info-item5{ top: 145px;}
+	.info-item6{ top: 179px; }
+
+</style>
+
+<body>
+<div id="imgcont">
+		<img id="loader" src="/img/ajax-loader.gif" />			
+		<!-- 3d obj comes here-->
+			<div id="container">
+				<div id="scene">
+						<div class="item front"></div>									 	
+						<div class="item back"></div>								
+				</div>
+			</div>
+		<!-- EOF 3d obj-->
+</div>
+<div id="slider"></div>
+ 
+ 
+</body>
+</html>

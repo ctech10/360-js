@@ -1,0 +1,127 @@
+<!doctype html>
+ 
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>iframe800x800</title>
+  <link rel="stylesheet" href="/css/jquery-ui.css" />
+<script src="/js/jquery-1.9.1.min.js"></script>
+  <script src="/js/jquery-ui.js"></script>
+  <script>
+  
+  
+ 
+var spriteSrc = "/output/s800q50.jpg";
+  
+  //preloading sprite
+  function preloadSprite(){
+	if (document.images) {
+		var sprite = new Image();	
+		sprite.onload = function(){
+			//console.log('loaded')
+			 $("#loader").remove();
+			$("#imgcont").css({
+				"background":"#fff url("+ spriteSrc +") no-repeat scroll 0 -4800px"
+			});
+			$("#container").css("display", "block");
+			
+		}
+		sprite.src = spriteSrc;
+	}
+}
+ preloadSprite();
+
+
+//slider
+function initSlider(){
+	var cols  = 10, image_width = 800, image_height = 800, total_height = 9600;
+	$( "#slider" ).slider({
+		min: 0,
+		max: 120,
+		value:59,
+		slide: function( event, ui ) {    
+			// console.log(ui.value)
+			$("#imgcont").css("background-position", -image_width*(ui.value % cols) + "px " +  -parseInt(ui.value/cols)*image_height % total_height + "px");
+			
+		}
+	});
+
+}
+
+ 
+             
+            
+  $(function() {
+        
+		initSlider()
+        
+        
+  });
+  </script>
+</head>
+<style>
+body,img{
+    margin:0;
+    padding:0;
+    border:0 none;
+}
+
+
+:focus{
+    outline:0 none;
+}
+
+
+#imgcont{
+    height:800px;
+    width:800px;
+    margin: -65px auto 30px;
+    
+    overflow:hidden;
+    position:relative;
+   
+    
+    background:#fff;
+}
+
+#slider{
+    width:750px;
+    margin:0 auto;
+    background:transparent;
+    border:0 none;
+}
+
+
+
+#loader{
+    position:absolute;
+    top: 425px;
+    left: 350px;
+    z-index:10000;
+}
+    
+ /*jquery ui overrides*/   
+ 
+ .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default{
+    background:none;
+     border:0 none;
+ }
+ 
+ .ui-slider .ui-slider-handle{
+    width:33px;
+    height:21px;
+    background:transparent url(/img/b.png) no-repeat scroll 0 0;
+      cursor:pointer;
+    
+ }
+    
+</style>
+<body>
+<div id="imgcont">
+	<img id="loader" src="/img/ajax-loader.gif" />		
+</div>
+<div id="slider"></div>
+ 
+ 
+</body>
+</html>

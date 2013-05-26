@@ -1,0 +1,100 @@
+<!Doctype html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>
+    Magshimim test
+</title>
+<link href="/css/colorbox.css" rel="stylesheet">
+<script src="/js/jquery-1.9.1.min.js"></script>
+<script src="/js/jquery.colorbox-min.js"></script>
+<style>
+:focus{
+    outline:0 none;
+}
+img{
+    margin:0;
+    padding:0;
+    border:0 none;
+}
+
+
+
+    body{
+        background:url(/img/magbg.png) repeat-x -7px 0 scroll transparent;
+        margin:0;
+        padding:0;
+       
+    }
+    
+    #main_cont{
+        background:url(/img/mag2.png) no-repeat  0 0 scroll transparent;
+        margin:0 auto;
+        width:1008px;
+        height:1000px;
+        position:relative;
+    }
+    
+    
+    
+    
+</style>
+
+<style>    
+    
+    
+    
+    
+    #iframe_cont{
+        position:absolute;
+        height:545px;
+        width:500px;        
+        top:137px;
+        left:14px;
+        overflow:hidden;
+    }
+
+        #iframe_link{
+            position:absolute;
+            top:145px;
+            left:20px;
+            height:38px;
+            width:38px;
+            background:url(/img/o2.jpg) no-repeat  0 0 scroll transparent;
+        }
+
+
+
+
+
+</style>
+<script>
+    $(function ()
+    {
+
+        $("#iframe_link").colorbox({iframe:true, innerWidth:500, innerHeight:500,overlayClose: true}); 
+ 
+        if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {        
+             // $("#colorbox").css('transform','scale(1.1)')   
+            //cousing bug in ipad4, disables touch events on the iframe                
+        }       
+        else{
+              $("#colorbox").css('transform','scale(1.3)')     
+        }
+       
+    })
+</script>
+
+</head>
+<body>
+    <div id="main_cont" class="">
+        <div id="iframe_cont" style="overflow:hidden;">
+            <iframe scrolling="no"  width="500" height="500" style="overflow:hidden; border: 0 none;" src="iframe500new.html"></iframe>
+        </div>
+    	<a id='iframe_link' href="/iframe500new.html"></a>
+    </div>
+
+
+</body>
+
+</html>

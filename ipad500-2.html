@@ -1,0 +1,389 @@
+<!Doctype html> 
+<html lang="en">
+<head>
+	<base target="_parent" />
+	<meta charset="utf-8" />
+	<title>iframe500x500</title>
+
+	<link rel="stylesheet" href="/css/jquery-ui.css" />
+	<script src="/js/jquery-1.9.1.min.js"></script>
+	<script src="/js/jquery-ui.js"></script>
+	<script src="/js/handlebars-1.0.rc.1.min.js"></script>
+	<!--<script src="/js/jquery.ui.ipad.js"></script> -->
+	<script src="/js/jquery.ui.touch-punch.min.js"></script>
+	
+	
+	
+	
+	
+	
+
+
+<!-- labels tempmlate-->	
+<script id="label-template" type="text/x-handlebars-template">
+	<div class="info-item info-item{{ position }} info-item-{{ side }}">
+		<img src="/img/label-{{ side }}-op50.png" class="info-item-label"/>
+		<a href="{{ link }}" class="info-item-label-link">למכירה</a>
+	</div>
+</script>
+  
+  
+<script>
+
+/***
+	labels scheme: 
+		face:{front|back},
+		side:{left|right},
+		position:{1-6},
+		link:string
+*/
+var labels = [		
+	{"face":"front","side":"right", "position":"1", "link":"http://google.com"},
+	{"face":"front","side":"left", "position":"4", "link":"http://google.com"},		
+	{"face":"back","side":"left", "position":"2", "link":"http://google.com"},
+	{"face":"back","side":"left", "position":"6", "link":"http://google.com"},
+	{"face":"back","side":"right", "position":"1", "link":"http://google.com"}
+	
+];
+
+
+</script>
+  
+  
+  <script>
+  /*
+  var spriteSrc = "/output/s500q75.jpg";
+  
+  
+  
+    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {        
+        
+        //cousing bug in ipad4, disables touch events on the iframe 
+         // $("#colorbox").css('transform','scale(1.1)')   
+         
+         
+        // spriteSrc = "/output/s500q10.jpg";        
+    }  
+        
+ */
+
+
+
+ //slider
+function initSlider(){
+	var cols  = 10, image_width = 500, image_height = 500, total_height = 6000, el=$("#sprite-img")[0];
+    
+
+      
+      
+	$( "#slider" ).slider({
+		min: 0,
+		max: 120,
+		value:59,
+		slide: function( event, ui ) {               
+           
+           
+           
+ 
+           var x = ui.value, // each ui.value is equal to 1 pic or 3deg (120pics X 3deg = 360)
+            opacity_val_front =(x-70)*(x-50)/-75, //positive between 50 & 70
+            opacity_val_back = (x-110)*(x-10)/525; //positive when x < 10 or x > 110
+            
+            var img_x_val = -image_width*(ui.value % cols), 
+                img_y_val = -parseInt(ui.value/cols)*image_height % total_height,
+                row_num = -img_y_val/image_height + 1 ;
+                
+            var img_src = '/output/bg/r' + row_num.toString() + '.jpg',
+                img_src_origin =  $("#sprite-img").attr('src') ;
+                
+            console.log('img_src:' + img_src + '   ' + 'img_src_origin:' + img_src_origin)
+              $("#sprite-img").css("transform","translateX("+ img_x_val +"px)");
+            if(img_src_origin !=  img_src ){
+                    console.log('changing')
+            
+                 $("#sprite-img").attr('src',img_src );
+                  $("#sprite-img").css("transform","translateX("+ img_x_val +"px)");
+             
+              $("#sprite-img").css("transform","translateX("+ img_x_val +"px)");
+            }
+                
+              
+          
+            
+            
+            
+          $("#front").css('opacity',opacity_val_front);
+          $("#back").css('opacity',opacity_val_back);
+           
+           
+           //examples for calculating degree ranges when the element should showup
+          //http://www.wolframalpha.com/input/?i=parabola%20passing%20through%20(50,0),(70,0),(55,1)
+          //http://www.wolframalpha.com/input/?i=parabola%20passing%20through%20(5,1),(10,0),(110,0)  
+
+            
+		}
+	});
+
+}
+		
+
+			
+//labels
+function renderLabels(){
+	labels = labels || [];
+	var source   = $("#label-template").html();
+	var template = Handlebars.compile(source);
+	$(labels).each(function(index,item){
+		var html    = template(item);		
+		$("." + item.face).append(html)
+	})
+}
+	
+	
+ 
+ //document ready           
+$(function() {
+	//console.log('ready')
+	initSlider();
+	renderLabels();
+    //$("#sprite-img").css("transform","translateY(-3000px)");
+    $("#front").css('opacity',1);
+
+});
+  
+
+ 
+</script>
+  
+  
+
+
+
+</head>
+
+<!-- Slider & sprite styles -->
+<style>
+body,img{
+    margin:0;
+    padding:0;
+    border:0 none;
+}
+
+
+:focus{
+    outline:0 none;
+}
+
+
+#imgcont{
+    height:500px;
+    width:500px;
+    margin: -55px auto 20px;
+ 
+    overflow:hidden;
+    position:relative;
+
+}
+
+#slider{
+    width:450px;
+    margin:0 auto;
+    background:transparent;
+    border:0 none;
+}
+
+
+
+#loader{
+    position:absolute;
+    top: 225px;
+    left: 200px;
+    z-index:10000;
+}
+    
+    
+    
+#sprite-img{
+
+}
+ /*jquery ui overrides*/   
+ 
+ .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default{
+    background:none;
+     border:0 none;
+ }
+ 
+ .ui-slider .ui-slider-handle{
+    width:33px;
+    height:21px;
+    background:transparent url(/img/b.png) no-repeat scroll 0 0;
+    cursor:pointer;
+    
+ }
+    
+</style>
+
+
+<!-- 3D cube styles -->
+<style>
+
+
+
+#sprite-img{
+
+ position:absolute;
+        left:0;
+        top:0;
+        height:500px;
+        width:5000px;
+        /*background:green url(/output/q100n1.jpg) repeat-y scroll 0 0;*/
+        
+        /*
+        background:
+           url(/output/bg/r1.jpg) no-repeat 0 0, 
+            url(/output/bg/r2.jpg) no-repeat 0 500px, 
+            url(/output/bg/r3.jpg) no-repeat 0 1000px, 
+            url(/output/bg/r4.jpg) no-repeat 0 1500px, 
+            url(/output/bg/r5.jpg) no-repeat 0 2000px, 
+            url(/output/bg/r6.jpg) no-repeat 0 2500px, 
+            url(/output/bg/r7.jpg) no-repeat 0 3000px, 
+            url(/output/bg/r8.jpg) no-repeat 0 3500px, 
+            url(/output/bg/r9.jpg) no-repeat 0 4000px,  
+            url(/output/bg/r10.jpg) no-repeat 0 4500px, 
+            url(/output/bg/r11.jpg) no-repeat 0 5000px,  
+            url(/output/bg/r12.jpg) no-repeat 0 5500px
+            */
+           
+       /*  
+        url(/output/bg2/r1-2.jpg) no-repeat 0 0, 
+        url(/output/bg2/r3-4.jpg) no-repeat 0 1000px, 
+        url(/output/bg2/r5-6.jpg) no-repeat 0 2000px, 
+        url(/output/bg2/r7-8.jpg) no-repeat 0 3000px, 
+        url(/output/bg2/r9-10.jpg) no-repeat 0 4000px, 
+        url(/output/bg2/r11-12.jpg) no-repeat 0 5000px */
+
+        
+}
+
+#container{
+
+	height:300px;
+	width:300px;
+	position:absolute;
+	top: 100px;
+	left: 100px;
+	display:none; 
+}
+	
+	
+		#scene{
+			width: 100%;
+			height: 100%;
+			position: absolute;
+
+		}
+				.item{
+					position: absolute;
+					top:50px;
+					left:50px;
+					width: 200px;
+					height: 200px;		
+				/*	outline:1px solid blue; */
+					
+				}
+				
+				.front{
+					width: 150px;
+                     opacity:0;
+				}			
+
+
+				.back{
+					width: 150px;
+                    opacity:0;
+				 
+				}	
+
+</style>
+
+<!-- info labels styles-->
+<style>
+
+.info-item{
+	height: 27px;
+	width: 70px;
+	position:absolute;	 
+}
+			
+
+	 .info-item-label{
+		height: 61px;
+		position: absolute;	
+		bottom: 0px;
+		border:0 none;
+	 }
+	 
+	.info-item-label-link{
+		position:absolute;
+		text-decoration:none;
+		font-family: arial;
+		font-size: 10px;
+		color: #01B0DB;
+		bottom: 0;
+	 }
+	
+	.info-item-left{ left: 0px;}			
+	.info-item-right{ left: 101px;}
+	
+	
+	.info-item-left .info-item-label{ left: -86px; }	 
+	.info-item-right .info-item-label{ left: 6px; }
+    
+    
+    
+    
+
+	.info-item-left .info-item-label-link{ left: -87px; }
+	.info-item-right .info-item-label-link{ left: 163px; }
+	
+ 
+    
+    #back   .info-item-right  {  left: 85px; }
+      #back   .info-item-left  {  left: -15px; }
+   
+   
+   #front .info-item-right .info-item-label {
+        left: 5px;
+}
+    
+	.info-item1{ top: 6px; }
+	.info-item2{ top: 54px;}
+	.info-item3{ top: 101px;}			
+	.info-item4{ top: 149px;}
+	.info-item5{ top: 196px;}
+	.info-item6{ top: 244px; }
+
+</style>
+
+
+   
+ 
+    
+    
+<body>
+<div id="imgcont">
+		<img id="sprite-img" src="/output/bg/r7.jpg" /> 
+
+        <div id="container">
+            <div id="scene">
+                    <div class="item front" id="front"></div>									 	
+                    <div class="item back" id="back"></div>								
+            </div>
+        </div>
+
+</div>
+<div id="slider"></div>
+ <img id="slider-bg" src="/img/slider-bg.png" style="position:absolute;bottom:3px;left:2px"/>
+ 
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!Doctype html>
+<html>
+<head>
+<title>
+    Magshimim test
+</title>
+<link href="/css/colorbox.css" rel="stylesheet">
+<script src="/js/jquery-1.9.1.min.js"></script>
+<script src="/js/jquery.colorbox-min.js"></script>
+<style>
+:focus{
+    outline:0 none;
+}
+img{
+    margin:0;
+    padding:0;
+    border:0 none;
+}
+
+
+
+    body{
+        background:url(/img/magbg.png) repeat-x -7px 0 scroll transparent;
+        margin:0;
+        padding:0;
+       
+    }
+    
+    #main_cont{
+        background:url(/img/mag2.png) no-repeat  0 0 scroll transparent;
+        margin:0 auto;
+        width:1008px;
+        height:1000px;
+        position:relative;
+    }
+    
+    #iframe_cont{
+        position:absolute;
+        height:545px;
+        width:500px;        
+        top:137px;
+        left:14px;
+        overflow:hidden;
+    }
+
+    #iframe_link{
+        position:absolute;
+        top:145px;
+        left:20px;
+        height:38px;
+        width:38px;
+        background:url(/img/o2.jpg) no-repeat  0 0 scroll transparent;
+    }
+
+
+</style>
+<script>
+    $(function ()
+    {
+        $("#iframe_link").colorbox({iframe:true, innerWidth:800, innerHeight:800});    
+    })
+</script>
+
+</head>
+<body>
+    <div id="main_cont">
+        <div id="iframe_cont" style="overflow:hidden;">
+            <iframe scrolling="no"  width="500" height="500" style="overflow:hidden; border: 0 none;" src="iframe500test.html"></iframe>
+        </div>
+    	<a id='iframe_link' href="/iframe800test.html"></a>
+    </div>
+
+
+</body>
+
+</html>
